@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: quickwork
+      POSTGRES_USER: quickwork
+      POSTGRES_PASSWORD: quickwork
+    ports:
+      - "5432:5432"
+    volumes:
+      - quickwork-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quickwork"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: quickwork
+      DB_USER: quickwork
+      DB_PASSWORD: quickwork
+      SEED_DEMO_DATA: "true"
+    ports:
+      - "8080:8080"
+
+volumes:
+  quickwork-db:

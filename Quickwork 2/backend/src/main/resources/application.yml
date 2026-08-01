@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: quickwork-api
+  datasource:
+    url: jdbc:h2:mem:quickwork;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+quickwork:
+  # platform commission taken on top of the job price, charged to the lister
+  platform-fee-rate: 0.10
+  # hours a lister has to confirm completion before the payout auto-releases
+  auto-release-hours: 48
+  # how often the scheduler sweeps for reminders / auto-releases
+  scheduler-interval-ms: 60000
+  seed-demo-data: true
+
+logging:
+  level:
+    edu.virginia.quickwork: DEBUG
